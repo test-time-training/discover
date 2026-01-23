@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/XXXX.XXXXX"><img src="https://img.shields.io/badge/arXiv-XXXX.XXXXX-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://arxiv.org/abs/2601.16175"><img src="https://img.shields.io/badge/arXiv-2601.16175-b31b1b.svg" alt="arXiv"></a>
   <a href="https://test-time-training.github.io/discover/"><img src="https://img.shields.io/badge/Project-Page-blue" alt="Project Page"></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
 </p>
@@ -176,7 +176,7 @@ This work builds on several outstanding projects and communities:
              and Bianchi, Federico and McCaleb, Jed and Wang, Xiaolong 
              and Kautz, Jan and Choi, Yejin and Zou, James 
              and Guestrin, Carlos and Sun, Yu},
-  journal = {arXiv preprint},
+  journal = {arXiv preprint arXiv:2601.16175},
   year    = {2026}
 }
 ```
