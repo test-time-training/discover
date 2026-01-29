@@ -34,13 +34,11 @@ def _compute_by_group_metrics(trajectory_groups_P: List[TrajectoryGroup], good_t
 
 def get_log_table(trajectory_groups_P: List[TrajectoryGroup]):
     table_row_list = []
-    # @xh: loop over all groups
     for i in range(len(trajectory_groups_P)):
         if 'response' not in trajectory_groups_P[i].trajectories_G[0].transitions[0].metrics:
             return None
-        # @xh: loop inside a group
         for j in range(len(trajectory_groups_P[i].trajectories_G)):
-            traj_metrics = trajectory_groups_P[i].trajectories_G[j].transitions[0].metrics  # @xh: len(transitions) always =1?
+            traj_metrics = trajectory_groups_P[i].trajectories_G[j].transitions[0].metrics
             prompt = traj_metrics['prompt']
             response = traj_metrics['response']
             grid = str(traj_metrics['predicted_grid']) if traj_metrics['predicted_grid'] is not None else ''
@@ -60,7 +58,7 @@ def get_log_table(trajectory_groups_P: List[TrajectoryGroup]):
 def remove_non_numerical_field(trajectory_groups_P: List[TrajectoryGroup]):
     for i in range(len(trajectory_groups_P)):
         for j in range(len(trajectory_groups_P[i].trajectories_G)):
-            traj_metrics = trajectory_groups_P[i].trajectories_G[j].transitions[0].metrics  # @xh: len(transitions) always =1?
+            traj_metrics = trajectory_groups_P[i].trajectories_G[j].transitions[0].metrics
             for k in ['prompt_hash', 'predicted_grid', 'prompt', 'response', 'ref']:
                 if k in traj_metrics:
                     traj_metrics.pop(k)
@@ -89,7 +87,7 @@ def compute_trajectory_metrics(
     if log_table is not None:
         out.update({'table': log_table})
 
-    remove_non_numerical_field(trajectory_groups_P)  # @xh: before `_compute_trajectory_metrics`
+    remove_non_numerical_field(trajectory_groups_P)
     
     out.update(
         {f"env/all/{k}": v for k, v in _compute_trajectory_metrics(trajectory_groups_P).items()}

@@ -352,7 +352,7 @@ class PUCTSampler(StateSampler):
         self.topk_children = topk_children
         self.puct_c = float(puct_c)
         self.group_size = int(group_size)
-        # TODO(mert): remove this
+        # TODO: remove this
         self.group_size = 1
         
         self._states: list[State] = []
