@@ -4,24 +4,8 @@
 </p>
 
 
-> [!IMPORTANT]
-> We'll refactor the code and share a much simpler API very soon! Sorry for the transition period..
 
 
-<p align="center">
-  <a href="https://arxiv.org/abs/2601.16175"><img src="https://img.shields.io/badge/arXiv-2601.16175-b31b1b.svg" alt="arXiv"></a>
-  <a href="https://test-time-training.github.io/discover/"><img src="https://img.shields.io/badge/Project-Page-blue" alt="Project Page"></a>
-  <a href="#"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-</p>
-
-<p align="center">
-  <b>Mert Yuksekgonul*</b>, <b>Daniel Koceja*</b>, <b>Xinhao Li*</b>, <b>Federico Bianchi*</b><br>
-  Jed McCaleb, Xiaolong Wang, Jan Kautz, Yejin Choi, James Zou†, Carlos Guestrin†, Yu Sun*
-</p>
-
-<p align="center">
-  <em>Stanford · NVIDIA · Astera Institute · UC San Diego · Together AI</em>
-</p>
 
 ---
 
