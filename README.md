@@ -148,17 +148,6 @@ This work builds on several outstanding projects and communities:
 
 ## Citation
 
-```bibtex
-@article{ttt-discover2026,
-  title   = {Learning to Discover at Test Time},
-  author  = {Yuksekgonul, Mert and Koceja, Daniel and Li, Xinhao 
-             and Bianchi, Federico and McCaleb, Jed and Wang, Xiaolong 
-             and Kautz, Jan and Choi, Yejin and Zou, James 
-             and Guestrin, Carlos and Sun, Yu},
-  journal = {arXiv preprint arXiv:2601.16175},
-  year    = {2026}
-}
-```
 
 ## License
 
