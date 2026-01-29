@@ -466,8 +466,7 @@ def submit_job(args, hydra_overrides):
         "tasks_per_node": 1,
     }
     hostname = socket.gethostname()
-    if 'eos' not in hostname and args.partition != "owners" and args.partition != "preempt":
-        # EOS doesn't allow specifying gpus_per_node. It always uses 8 gpus per node.
+    if 'cluster_a' not in hostname and args.partition != "owners" and args.partition != "preempt":
         slurm_kwargs["gpus_per_node"] = args.gpus_per_node
 
     slurm_kwargs["cpus_per_task"] = args.cpus_per_task
