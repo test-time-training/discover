@@ -159,7 +159,7 @@ async def cli_main(cli_config: CLIConfig):
     """Convert CLI config to full config and run training."""
 
     # Ray is needed to dispatch jobs across cpus
-    if cli_config.env in ("cp", "ac1", "ac2", "ale_bench", "erdos"): 
+    if cli_config.env in ("cp", "ac1", "ac2", "ale_bench", "erdos", "tictactoe"):
         import ray
         if not ray.is_initialized():
             ray.init()

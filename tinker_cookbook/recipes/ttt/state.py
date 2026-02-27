@@ -282,6 +282,50 @@ class DenoisingState(State):
         )
 
 
+class TictactoeState(State):
+    """State for tic-tac-toe evaluation polynomial optimization."""
+    code: str
+    coefficients: list[float]
+    mse: float
+
+    def __init__(self, timestep: int, code: str, value: float = None,
+                 coefficients: list[float] = None, mse: float = None,
+                 parent_values: list[float] = None, parents: list[dict] = None,
+                 id: str = None, observation: str = ""):
+        super().__init__(timestep, value, parent_values, parents, id, observation)
+        self.code = code
+        self.coefficients = to_json_serializable(coefficients) if coefficients is not None else None
+        self.mse = mse
+
+    def to_dict(self) -> dict:
+        return {
+            "type": "TictactoeState",
+            "id": self.id,
+            "timestep": self.timestep,
+            "value": self.value,
+            "parent_values": self.parent_values,
+            "parents": self.parents,
+            "observation": self.observation,
+            "code": self.code,
+            "coefficients": to_json_serializable(self.coefficients) if self.coefficients is not None else None,
+            "mse": self.mse,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "TictactoeState":
+        return cls(
+            timestep=d["timestep"],
+            code=d["code"],
+            value=d.get("value"),
+            coefficients=d.get("coefficients"),
+            mse=d.get("mse"),
+            parent_values=d.get("parent_values", []),
+            parents=d.get("parents", []),
+            id=d.get("id"),
+            observation=d.get("observation", ""),
+        )
+
+
 # Registry for state types
 STATE_REGISTRY = {
     "InequalitiesState": InequalitiesState,
@@ -290,6 +334,7 @@ STATE_REGISTRY = {
     "AleBenchState": AleBenchState,
     "ErdosState": ErdosState,
     "DenoisingState": DenoisingState,
+    "TictactoeState": TictactoeState,
 }
 
 

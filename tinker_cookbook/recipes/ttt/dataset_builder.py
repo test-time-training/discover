@@ -114,6 +114,9 @@ class SingleProblemDataset(RLDataset):
             case "trimul" | "mla_decode_nvidia":
                 from tinker_cookbook.recipes.ttt.env_gpu_mode import GpuModeEnv
                 return GpuModeEnv
+            case "tictactoe":
+                from tinker_cookbook.recipes.ttt.env_tictactoe import TictactoeEnv
+                return TictactoeEnv
             case _:
                 raise ValueError(f"Unknown dataset name: {dataset_name}")
 
@@ -190,7 +193,8 @@ class SingleProblemDatasetBuilder(RLDatasetBuilder):
 
 # Valid dataset names
 VALID_DATASET_NAMES = {
-    "cp", "ac1", "ac2", "ale_bench", "denoising", "erdos", "trimul", "mla_decode_nvidia"
+    "cp", "ac1", "ac2", "ale_bench", "denoising", "erdos", "trimul", "mla_decode_nvidia",
+    "tictactoe",
 }
 
 

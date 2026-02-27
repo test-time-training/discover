@@ -13,6 +13,7 @@ from tinker_cookbook.recipes.ttt.state import (
     AleBenchState,
     ErdosState,
     DenoisingState,
+    TictactoeState,
     State,
     state_from_dict,
 )
@@ -186,6 +187,14 @@ def create_initial_state(env_type: str, initial_exp_type: str, budget_s: int = 1
     elif env_type == "denoising":
         from tasks.denoising.task import MAGIC_FUNC
         return DenoisingState(timestep=timestep, code=MAGIC_FUNC, value=0.24, mse=0.2316, poisson=0.0370)
+    elif env_type == "tictactoe":
+        if initial_exp_type == "random":
+            rng = np.random.default_rng()
+            coefficients = list(rng.normal(0, 0.1, 130))
+            from tasks.tictactoe.verifier import evaluate_tictactoe_polynomial
+            mse = evaluate_tictactoe_polynomial(coefficients)
+            return TictactoeState(timestep=-1, code="", value=-mse, coefficients=coefficients, mse=mse)
+        return TictactoeState(timestep=-1, code="", value=0.0, coefficients=None, mse=None)
     else:
         raise ValueError(f"Unknown env_type: {env_type}")
 
