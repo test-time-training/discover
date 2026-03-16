@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Sequence, TypeAlias, Any
 
 import chz
-import tinker
+import ttt_discover.tinker_compat as tinker
 from ttt_discover.tinker_utils import logtree, renderers
 from ttt_discover.tinker_utils.completers import StopCondition, TokensWithLogprobs
 from ttt_discover.tinker_utils.misc_utils import safezip

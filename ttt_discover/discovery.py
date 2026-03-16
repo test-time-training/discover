@@ -18,9 +18,9 @@ class DiscoverConfig:
     """Simple config for discovery with RL training."""
 
     # Model config
-    model_name: str = "openai/gpt-oss-120b"
+    model_name: str = "Qwen/Qwen3-8B"
     lora_rank: int = 32
-    renderer_name: str | None = "gpt_oss_high_reasoning"
+    renderer_name: str | None = "qwen3"
     save_every: int = 2
 
     # Training hyperparameters
@@ -31,6 +31,11 @@ class DiscoverConfig:
     temperature: float = 1.0
     kl_penalty_coef: float = 0.1
     phase1_max_tokens: int = 26000  # Two-phase sampling: total prompt + thinking token budget
+
+    # Infrastructure config
+    vllm_url: str = "http://localhost:8000/v1"
+    checkpoint_dir: str = "./checkpoints"
+    training_device: str = "cuda:1"
 
     # Misc config
     experiment_name: str | None = None
@@ -70,8 +75,6 @@ def init_ray(num_cpus_per_task: int, env_type: str):
 
 async def discover_impl(config: DiscoverConfig):
     """Convert discover config to full config and run training."""
-
-    assert config.model_name in {"openai/gpt-oss-120b", "openai/gpt-oss-20b"}, "Only supporting GPT-OSS models for now."
 
     # Ray is needed to dispatch jobs across cpus
     if config.num_cpus_per_task > 0:
@@ -122,6 +125,9 @@ async def discover_impl(config: DiscoverConfig):
         remove_constant_reward_groups=True,
         phase1_max_tokens=config.phase1_max_tokens,
         local_model_path=None,
+        vllm_url=config.vllm_url,
+        checkpoint_dir=config.checkpoint_dir,
+        training_device=config.training_device,
     )
 
     misc_utils.check_log_dir(log_path, behavior_if_exists="resume")

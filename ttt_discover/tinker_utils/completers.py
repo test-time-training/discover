@@ -9,7 +9,7 @@ Evals and other code should use the appropriate interface.
 from dataclasses import dataclass
 from typing import TypeAlias
 
-import tinker
+import ttt_discover.tinker_compat as tinker
 from ttt_discover.tinker_utils.misc_utils import Tokenizer
 
 # Interfaces

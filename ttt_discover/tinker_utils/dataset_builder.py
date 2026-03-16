@@ -9,7 +9,7 @@ import logging
 import re
 
 import chz
-import tinker
+import ttt_discover.tinker_compat as tinker
 from ttt_discover.tinker_utils import renderers, logtree
 from ttt_discover.rl.types import (
     ProblemEnv, ProblemGroupBuilder, EnvGroupBuilder, RLDataset, RLDatasetBuilder,

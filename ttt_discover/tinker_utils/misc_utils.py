@@ -183,7 +183,7 @@ import logging
 import os
 from typing import Any, Literal
 
-import tinker
+import ttt_discover.tinker_compat as tinker
 
 from ttt_discover.tinker_utils.trace import scope, update_scope_context
 

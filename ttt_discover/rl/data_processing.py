@@ -8,9 +8,9 @@ and assembling training batches.
 import logging
 from typing import List
 
-import tinker
+import ttt_discover.tinker_compat as tinker
 import torch
-from tinker import TensorData
+from ttt_discover.tinker_compat import TensorData
 from ttt_discover.rl.types import Trajectory, TrajectoryGroup
 from ttt_discover.tinker_utils.misc_utils import all_same, safezip
 

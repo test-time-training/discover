@@ -12,9 +12,9 @@ import chz
 import numpy as np
 import wandb
 import math
-import tinker
+import ttt_discover.tinker_compat as tinker
 import torch
-from tinker.types import LossFnType
+from ttt_discover.tinker_compat.types import LossFnType
 from ttt_discover.tinker_utils.misc_utils import get_last_checkpoint, save_checkpoint_async
 from ttt_discover.tinker_utils.completers import TwoPhaseTokenCompleter
 from ttt_discover.rl.data_processing import (
@@ -301,9 +301,14 @@ class Config:
 
     # Two-phase sampling: phase1_max_tokens for token completion
     phase1_max_tokens: int = 26000
-    
+
     # Local model path (avoids HuggingFace API rate limits)
     local_model_path: str | None = None
+
+    # Infrastructure config (passed to ServiceClient)
+    vllm_url: str = "http://localhost:8000/v1"
+    checkpoint_dir: str = "./checkpoints"
+    training_device: str = "cuda:1"
 
 
 @chz.chz
@@ -624,7 +629,12 @@ async def main(
         start_batch = 0
 
     print("Create training client...")
-    service_client = tinker.ServiceClient(base_url=None)
+    service_client = tinker.ServiceClient(
+        base_url=None,
+        vllm_url=cfg.vllm_url,
+        checkpoint_dir=cfg.checkpoint_dir,
+        training_device=cfg.training_device,
+    )
     print("Training client created!")
     if resume_info:
         # Resuming interrupted training - load optimizer state for proper continuation
