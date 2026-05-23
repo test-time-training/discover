@@ -1,3 +1,6 @@
+import dataclasses
+import math
+import random
 from dataclasses import dataclass, field
 from functools import partial
 from typing import Any, Literal, Sequence
@@ -41,6 +44,15 @@ class DatasetConfig:
     timeout: float = 8000.0 # Timeout for async grading, not sandbox timeout
     convo_prefix: Any = None
     gpu_mode_score_scale: float = 3000.0
+    # KernelBench-specific fields (ignored by other envs)
+    backend: str = "triton"
+    measure_performance: bool = True
+    num_correct_trials: int = 5
+    prompt_option: str = "one_shot"
+    prompt_precision: str | None = None
+    prompt_include_hardware: bool = False
+    prompt_gpu_name: str | None = None
+    dataset_src: str = "huggingface"
 
 
 class SingleProblemDataset(RLDataset):
@@ -134,6 +146,79 @@ def get_single_problem_dataset_builder(
         raise ValueError("log_path is required for dataset")
 
     return SingleProblemDatasetBuilder(config=config)
+
+
+class MultiProblemDataset(RLDataset):
+    """RLDataset that cycles through multiple problems. Uses SimpleStateSampler (no PUCT)."""
+
+    def __init__(
+        self,
+        config: DatasetConfig,
+        renderer,
+        problem_types: list[str],
+        shuffle: bool = True,
+        seed: int = 0,
+    ):
+        from ttt_discover.tinker_utils.sampler import SimpleStateSampler
+
+        self.config = config
+        self.renderer = renderer
+        self.problem_types = problem_types
+        self.batch_size = config.batch_size
+        self.group_size = config.group_size
+        self._SimpleStateSampler = SimpleStateSampler
+
+        self._order = list(range(len(problem_types)))
+        if shuffle:
+            rng = random.Random(seed)
+            rng.shuffle(self._order)
+
+    def __len__(self) -> int:
+        return math.ceil(len(self.problem_types) / self.batch_size)
+
+    def get_batch(self, index: int) -> Sequence[EnvGroupBuilder]:
+        start = index * self.batch_size
+        end = min(start + self.batch_size, len(self._order))
+        builders = []
+        for i in self._order[start:end]:
+            problem_type = self.problem_types[i]
+            per_problem_config = dataclasses.replace(self.config, problem_type=problem_type)
+            initial_state = self.config.env_type.create_initial_state(problem_type)
+            sampler = self._SimpleStateSampler(initial_state)
+            logging_name = getattr(self.config.env_type, "env_name", problem_type)
+            builders.append(ProblemGroupBuilder(
+                env_thunk=partial(
+                    self.config.env_type,
+                    self.renderer,
+                    initial_state=initial_state,
+                    sampler=sampler,
+                    config=per_problem_config,
+                ),
+                num_envs=self.group_size,
+                logging_name=logging_name,
+            ))
+        return builders
+
+
+@chz.chz
+class MultiProblemDatasetBuilder(RLDatasetBuilder):
+    """Builds a MultiProblemDataset from a list of problem_type strings."""
+
+    config: DatasetConfig
+    problem_types: list[str]
+    shuffle: bool = True
+    seed: int = 0
+
+    async def __call__(self) -> MultiProblemDataset:
+        tokenizer = get_tokenizer(self.config.model_name_for_tokenizer)
+        renderer = renderers.get_renderer(self.config.renderer_name, tokenizer=tokenizer)
+        return MultiProblemDataset(
+            config=self.config,
+            renderer=renderer,
+            problem_types=self.problem_types,
+            shuffle=self.shuffle,
+            seed=self.seed,
+        )
 
 
 def last_codeblock_postprocess(input_text, codeblock_seps=['python', 'cpp', 'java', 'cuda'], last_response_strict=True, keep_separators=True):

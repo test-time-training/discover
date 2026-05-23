@@ -433,6 +433,22 @@ class PUCTSampler(StateSampler):
         return columns, rows
 
 
+class SimpleStateSampler(StateSampler):
+    """Always returns the same initial state. No buffer, no PUCT. For standard RL training."""
+
+    def __init__(self, initial_state: State):
+        self._initial_state = initial_state
+
+    def sample_states(self, num_states: int) -> list[State]:
+        return [self._initial_state] * num_states
+
+    def update_states(self, states: list[State], parent_states: list[State], save: bool = True, step: int | None = None):
+        pass  # no-op
+
+    def flush(self, step: int | None = None):
+        pass  # no-op
+
+
 def create_sampler(
     log_path: str,
     env_type: type,
