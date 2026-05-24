@@ -142,7 +142,7 @@ async def _run_impl(
         save_every=save_every,
         num_epochs=num_epochs,
         loss_fn="importance_sampling",
-        adv_estimator="entropic_adaptive_beta",
+        adv_estimator="mean_baseline",
         adv_estimator_beta=2.0,
         remove_constant_reward_groups=True,
         phase1_max_tokens=phase1_max_tokens,
